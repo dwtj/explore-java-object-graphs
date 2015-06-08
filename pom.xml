@@ -3,12 +3,12 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>me.dwtj</groupId>
-  <artifactId>object-graph-exploration</artifactId>
+  <artifactId>explore-java-object-graphs</artifactId>
   <version>0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>object-graph-exploration</name>
-  <url>http://maven.apache.org</url>
+  <name>explore-java-object-graphs</name>
+  <url>https://github.com/dwtj/explore-java-object-graphs</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
