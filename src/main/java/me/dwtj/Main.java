@@ -14,5 +14,6 @@ public class Main
         List<String> xs_list = List.<String>cat(xs_arr);
         System.out.println(">>>>>> xs_list: " + xs_list);
         Explorer explorer = new Explorer(new ObjectGraphLogger(), RECURSION_DEPTH);
+        explorer.explore(xs_list);
     }
 }
