@@ -35,4 +35,8 @@ public class List<T>
         }
         return xs;
     }
+
+    public String toString() {
+        return head.toString() + ((tail == List.<T>nil()) ? "" : " " + tail.toString());
+    }
 }

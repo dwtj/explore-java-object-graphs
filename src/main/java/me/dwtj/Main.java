@@ -12,6 +12,7 @@ public class Main
 
         String[] xs_arr = {"foo", "bar", "baz"};
         List<String> xs_list = List.<String>cat(xs_arr);
+        System.out.println(">>>>>> xs_list: " + xs_list);
         Explorer explorer = new Explorer(new ObjectGraphLogger(), RECURSION_DEPTH);
     }
 }
