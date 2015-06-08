@@ -2,8 +2,8 @@ package me.dwtj;
 
 public class List<T>
 {
-    private final T head;
-    private final List<T> tail;
+    private T head;
+    private List<T> tail;
 
     public List(T head) {
         this.head = head;
