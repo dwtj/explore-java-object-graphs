@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the `Explorer` class (with a default `Visitor` and `Navigator`) to make sure that the
  * actual counted number of visited object is as expected.
  */
-public class TestVisitCount
+public class TestExplorerBasics
 {
     Explorer default_explorer;
 

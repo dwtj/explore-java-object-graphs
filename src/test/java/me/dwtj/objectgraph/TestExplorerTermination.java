@@ -28,7 +28,7 @@ public class TestExplorerTermination
         final int EXPECTED_COUNT = 0;
         Object nullObj = null;
         default_explorer.explore(nullObj);
-        TestVisitCount.assertVisitCount(default_explorer, nullObj, EXPECTED_COUNT);
+        TestExplorerBasics.assertVisitCount(default_explorer, nullObj, EXPECTED_COUNT);
     }
 
     @Test
@@ -36,7 +36,7 @@ public class TestExplorerTermination
     {
         List<String> listWithNullHeadField = new List<String>(null);
         default_explorer.explore(listWithNullHeadField);
-        TestVisitCount.assertVisitCount(default_explorer, listWithNullHeadField, 1);
+        TestExplorerBasics.assertVisitCount(default_explorer, listWithNullHeadField, 1);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class TestExplorerTermination
         final int EXPECTED_COUNT = 1;
         PrimitiveHolder holder = new PrimitiveHolder();
         default_explorer.explore(holder);
-        TestVisitCount.assertVisitCount(default_explorer, holder, EXPECTED_COUNT);
+        TestExplorerBasics.assertVisitCount(default_explorer, holder, EXPECTED_COUNT);
     }
 
     @Test
@@ -54,7 +54,7 @@ public class TestExplorerTermination
         final int EXPECTED_COUNT = 1 + NUM_PRIMITIVE_TYPES;
         BoxedPrimitiveHolder holder = new BoxedPrimitiveHolder();
         default_explorer.explore(holder);
-        TestVisitCount.assertVisitCount(default_explorer, holder, EXPECTED_COUNT);
+        TestExplorerBasics.assertVisitCount(default_explorer, holder, EXPECTED_COUNT);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class TestExplorerTermination
         final int EXPECTED_COUNT = 1;
         String str = "foo";
         default_explorer.explore(str);
-        TestVisitCount.assertVisitCount(default_explorer, str, EXPECTED_COUNT);
+        TestExplorerBasics.assertVisitCount(default_explorer, str, EXPECTED_COUNT);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class TestExplorerTermination
         final int EXPECTED_COUNT = 4;
         String[] str_arr = {"foo", "bar", "baz"};
         default_explorer.explore(str_arr);
-        TestVisitCount.assertVisitCount(default_explorer, str_arr, EXPECTED_COUNT);
+        TestExplorerBasics.assertVisitCount(default_explorer, str_arr, EXPECTED_COUNT);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class TestExplorerTermination
         String[][] str_arr_arr = {{"a", "b", "c"},
                                   {"d", "e", "f"}};
         default_explorer.explore(str_arr_arr);
-        TestVisitCount.assertVisitCount(default_explorer, str_arr_arr, EXPECTED_COUNT);
+        TestExplorerBasics.assertVisitCount(default_explorer, str_arr_arr, EXPECTED_COUNT);
     }
 
     /**
