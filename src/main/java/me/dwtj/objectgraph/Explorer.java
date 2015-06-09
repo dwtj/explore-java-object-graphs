@@ -20,10 +20,8 @@ import me.dwtj.objectgraph.util.IdentitySet;
  * The `Explorer` itself is responsible for guaranteeing no object is visited twice, even if the
  * `Navigator` points the explorer to a particular object more than once.
  *
- * If no `Visitor` is provided at construction, then a default visitor is used. The default visitor
- * takes no action on an object upon visitation.  Similarly, if no `Navigator` is provided at
- * construction, a default navigator is used. The default navigator points the explorer towards all
- * fields which are reference types (e.g. arrays and objects).
+ * If no `Visitor` is provided at construction, then a `NoOpVisitor` is instantiated and used. If
+ * no navigator is provided at construction, a `GreedyNavigator` is instantiated and used.
  *
  * **Warning:** The current implementation naively recursive, so it is susceptible to stack overflow
  * if the explorer attempts to recurse down a long enough path of unique object in the object graph.
@@ -42,17 +40,17 @@ public class Explorer
 
     public Explorer(Visitor v) {
         visitor = v;
-        navigator = new DefaultNavigator();
+        navigator = new GreedyNavigator();
     }
 
     public Explorer(Navigator n) {
-        visitor = new DefaultVisitor();
+        visitor = new NoOpVisitor();
         navigator = n;
     }
 
     public Explorer() {
-        visitor = new DefaultVisitor();
-        navigator = new DefaultNavigator();
+        visitor = new NoOpVisitor();
+        navigator = new GreedyNavigator();
     }
 
     public void explore(Object obj)
@@ -74,17 +72,24 @@ public class Explorer
 
 
     /**
-     * Does nothing when it visits an object.
+     * Does takes no action when it visits an object.
      */
-    public static class DefaultVisitor implements Visitor {
+    public static class NoOpVisitor implements Visitor {
         public void visit(Object obj) { /* no-op */ }
     }
 
 
     /**
-     * Greedily navigates an explorer towards as many objects as possible.
+     * Greedily navigates an `Explorer` towards as many objects as possible (with a few exceptions).
+     * It generally navigates towards all reference fields of a given object, even its private ones.
+     * Examples of fields towards which this class does not navigate:
+     *
+     *  - Fields with primitive types.
+     *  - Fields containing `null` values.
+     *  - Fields of `String` objects.
+     *  - Fields of a primitive-boxing class (e.g. `Integer`).
      */
-    public static class DefaultNavigator implements Navigator
+    public static class GreedyNavigator implements Navigator
     {
         public Iterable<Object> navigate(Object obj)
         {
@@ -148,6 +153,10 @@ public class Explorer
             return (obj == null) ? false : true;
         }
 
+        /**
+         * Returns `true` if and only if the given `obj` is an instance of one of the primitive-
+         * boxing types, for example, an `Integer`.
+         */
         private static boolean isBoxedPrimitiveInstance(Object obj)
         {
             return (obj instanceof Boolean
