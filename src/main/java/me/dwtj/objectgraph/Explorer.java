@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Set;
 
 import me.dwtj.util.IdentitySet;
-import me.dwtj.util.Log;
 
 /**
  * Explores an object graph using a `Visitor` and a `Navigator`.
@@ -110,10 +109,12 @@ public class Explorer
                         }
                     }
                     catch (IllegalAccessException ex) {
-                        Log.debug("Explorer.DefaultNavigator.navigate(): IllegalAccessException");
+                        // TODO: Log and/or handle this.
+                        ex.printStackTrace();
                     }
                     catch (IllegalArgumentException ex) {
-                        throw new AssertionError();
+                        // TODO: Log and/or handle this.
+                        ex.printStackTrace();
                     }
                 }
             }
