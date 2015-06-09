@@ -58,6 +58,10 @@ public class Explorer
 
     public void explore(Object obj)
     {
+        if (obj == null) {
+            return;
+        }
+
         visited.add(obj);
         visitor.visit(obj);
         for (Object n : navigator.navigate(obj))
@@ -85,11 +89,12 @@ public class Explorer
     {
         public Iterable<Object> navigate(Object obj)
         {
-            assert obj != null;
+            /**
+             * Note that a child object is included in `rv` if and only if three conditions are met.
+             */
             List<Object> rv = new ArrayList<Object>();
 
-            if (isNavigableObject(obj) == false)
-            {
+            if (isNavigableObject(obj) == false) {
                 return rv;
             }
 
@@ -115,27 +120,44 @@ public class Explorer
             return rv;
         }
 
-        public static boolean isNavigableObject(Object obj)
+        /**
+         * Returns true if navigation out from this object should be attempted.
+         */
+        protected static boolean isNavigableObject(Object obj)
         {
-            // TODO: Everything!
-            if (obj instanceof String)
-                return false;
-            else
-                return true;
+            return (obj == null
+                 || obj instanceof String
+                 || isBoxedPrimitiveInstance(obj)) ? false : true;
         }
 
-        public static boolean isNavigableField(Field f)
+        /**
+         * Returns true 
+         */
+        protected static boolean isNavigableField(Field f)
         {
             // TODO: Everything!
             return true;
         }
 
-        public static boolean isNavigableFieldValue(Object obj)
+        /**
+         * Returns true if navigation towards this field should be attempted.
+         */
+        protected static boolean isNavigableFieldValue(Object obj)
         {
-            if (obj == null)
-                return false;
-            else
-                return true;
+            return (obj == null) ? false : true;
+        }
+
+        private static boolean isBoxedPrimitiveInstance(Object obj)
+        {
+            return (obj instanceof Boolean
+                 || obj instanceof Byte
+                 || obj instanceof Character
+                 || obj instanceof Double
+                 || obj instanceof Enum
+                 || obj instanceof Float
+                 || obj instanceof Integer
+                 || obj instanceof Long
+                 || obj instanceof Short) ? true : false;
         }
     }
 }

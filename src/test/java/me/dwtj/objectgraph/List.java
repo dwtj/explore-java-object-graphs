@@ -1,4 +1,4 @@
-package me.dwtj;
+package me.dwtj.objectgraph;
 
 public class List<T>
 {
@@ -37,6 +37,11 @@ public class List<T>
     }
 
     public String toString() {
-        return head.toString() + ((tail == List.<T>nil()) ? "" : " " + tail.toString());
+        String head_str = (head == null ? "<null>" : head.toString());
+        if (tail == List.<T>nil()) {
+            return head_str;
+        } else {
+            return head_str + " " + tail.toString();
+        }
     }
 }
