@@ -132,12 +132,12 @@ public class Explorer
         }
 
         /**
-         * Returns true 
+         * Returns true if navigation to the object at the given field is expected to be navigable
+         * based on the field's type.
          */
         protected static boolean isNavigableField(Field f)
         {
-            // TODO: Everything!
-            return true;
+            return isPrimitiveField(f) ? false : true;
         }
 
         /**
@@ -159,6 +159,11 @@ public class Explorer
                  || obj instanceof Integer
                  || obj instanceof Long
                  || obj instanceof Short) ? true : false;
+        }
+
+        private static boolean isPrimitiveField(Field f)
+        {
+            return f.getType().isPrimitive();
         }
     }
 }

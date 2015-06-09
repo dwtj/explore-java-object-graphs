@@ -12,6 +12,8 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestExplorerTermination
 {
+    public static final int NUM_PRIMITIVE_TYPES = 8;
+
     Explorer default_explorer;
 
     @Before
@@ -37,11 +39,61 @@ public class TestExplorerTermination
     }
 
     @Test
-    public void boxedPrimitiveTest()
+    public void primitivesTest()
     {
         final int EXPECTED_COUNT = 1;
-        Integer boxed_int = 42;
-        default_explorer.explore(boxed_int);
-        TestVisitCount.assertVisitCount(default_explorer, boxed_int, EXPECTED_COUNT);
+        PrimitiveHolder holder = new PrimitiveHolder();
+        default_explorer.explore(holder);
+        TestVisitCount.assertVisitCount(default_explorer, holder, EXPECTED_COUNT);
+    }
+
+    @Test
+    public void boxedPrimitivesTest()
+    {
+        final int EXPECTED_COUNT = 1 + NUM_PRIMITIVE_TYPES;
+        BoxedPrimitiveHolder holder = new BoxedPrimitiveHolder();
+        default_explorer.explore(holder);
+        TestVisitCount.assertVisitCount(default_explorer, holder, EXPECTED_COUNT);
+    }
+
+    @Test
+    public void stringTest()
+    {
+        final int EXPECTED_COUNT = 1;
+        String str = "foo";
+        default_explorer.explore(str);
+        TestVisitCount.assertVisitCount(default_explorer, str, EXPECTED_COUNT);
+    }
+
+    /**
+     * A class used in tests to make sure that the explorer does not attempt to navigate towards
+     * primitive fields.
+     */
+    private static class PrimitiveHolder
+    {
+        short _short;
+        byte _byte;
+        int _int;
+        long _long;
+        float _float;
+        double _double;
+        char _char;
+        boolean _boolean;
+    }
+
+    /**
+     * A class used in tests to make sure that the default Explorer does not attempt to navigate
+     * beyond boxed primitives.
+     */
+    private static class BoxedPrimitiveHolder
+    {
+        Short _short = 42;
+        Byte _byte = 42;
+        Integer _integer = 42;
+        Long _long = 42L;
+        Float _float = 42.0f;
+        Double _double = 42.0;
+        Character _character = 'c';
+        Boolean _boolean = true;
     }
 }
