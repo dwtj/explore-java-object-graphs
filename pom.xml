@@ -27,32 +27,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <dependencies>
-
-    <dependency>
-      <groupId>com.googlecode.behaim</groupId>
-      <artifactId>behaim</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
-    </dependency>
-
-    <!-- TODO: Find out what this dependency is for. -->
-    <!-- Added to prevent error described [here](http://www.slf4j.org/codes.html#StaticLoggerBinder). -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.6.0</version>
-    </dependency>
-
-    <!-- TODO: Find out what this dependency is for. -->
-    <!-- Added to prevent error described [here](http://www.slf4j.org/codes.html#StaticLoggerBinder). -->
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>0.9.21</version>
-      <optional>true</optional>
-    </dependency>
-
-  </dependencies>
-
 </project>
