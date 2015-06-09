@@ -35,12 +35,7 @@ public class TestVisitCount
     public static void assertVisitCount(Explorer explorer, Object obj, int expected_count)
     {
         int actual_count = explorer.visited.size();
-        String msg = formatAssertVisitCountMessage(obj, expected_count);
-        assertEquals(msg, actual_count, expected_count);
-    }
-
-    private static String formatAssertVisitCountMessage(Object obj, Integer expected_count)
-    {
-        return "When exploring "+obj+", the Explorer should visit "+expected_count+" objects";
+        String msg = "Exploring \"" + obj + "\" and counting visited objects...";
+        assertEquals(msg, expected_count, actual_count);
     }
 }
