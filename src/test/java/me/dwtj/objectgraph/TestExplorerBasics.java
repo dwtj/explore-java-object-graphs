@@ -104,6 +104,25 @@ public class TestExplorerBasics
         assertVisitCount(default_explorer, dag, EXPECTED_COUNT);
     }
 
+    @Test
+    public void selfLoop()
+    {
+        final int EXPECTED_COUNT = 1;
+        SelfLoop self_loop = new SelfLoop();
+        default_explorer.explore(self_loop);
+        assertVisitCount(default_explorer, self_loop, EXPECTED_COUNT);
+    }
+
+    @Test
+    public void smallLoop()
+    {
+        final int EXPECTED_COUNT = 3;
+        final int NUM_LINKS = 3;
+        Loop loop = Loop.cons(NUM_LINKS);
+        default_explorer.explore(loop);
+        assertVisitCount(default_explorer, loop, EXPECTED_COUNT);
+    }
+
     public static void assertVisitCount(Explorer explorer, Object obj, int expected_count)
     {
         int actual_count = explorer.visited.size();
