@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
  * Tests the `Explorer` class (with a default `Visitor` and `Navigator`) to make sure that
  * exploration terminates when expected.
  */
-public class TerminationTester
+public class TestExplorerTermination
 {
     Explorer default_explorer;
 
@@ -25,7 +25,7 @@ public class TerminationTester
         final int EXPECTED_COUNT = 0;
         Object nullObj = null;
         default_explorer.explore(nullObj);
-        CountVisitedTester.assertVisitCount(default_explorer, nullObj, EXPECTED_COUNT);
+        TestVisitCount.assertVisitCount(default_explorer, nullObj, EXPECTED_COUNT);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class TerminationTester
     {
         List<String> listWithNullHeadField = new List<String>(null);
         default_explorer.explore(listWithNullHeadField);
-        CountVisitedTester.assertVisitCount(default_explorer, listWithNullHeadField, 1);
+        TestVisitCount.assertVisitCount(default_explorer, listWithNullHeadField, 1);
     }
 
     @Test
@@ -42,6 +42,6 @@ public class TerminationTester
         final int EXPECTED_COUNT = 1;
         Integer boxed_int = 42;
         default_explorer.explore(boxed_int);
-        CountVisitedTester.assertVisitCount(default_explorer, boxed_int, EXPECTED_COUNT);
+        TestVisitCount.assertVisitCount(default_explorer, boxed_int, EXPECTED_COUNT);
     }
 }
