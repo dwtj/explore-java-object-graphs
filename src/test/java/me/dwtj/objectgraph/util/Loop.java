@@ -1,4 +1,4 @@
-package me.dwtj.objectgraph;
+package me.dwtj.objectgraph.util;
 
 public class Loop
 {

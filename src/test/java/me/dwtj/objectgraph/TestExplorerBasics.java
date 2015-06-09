@@ -4,6 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import me.dwtj.objectgraph.util.BinaryTree;
+import me.dwtj.objectgraph.util.List;
+import me.dwtj.objectgraph.util.Loop;
+import me.dwtj.objectgraph.util.SelfLoop;
+
 /**
  * Tests the `Explorer` class (with a default `Visitor` and `Navigator`) to make sure that the
  * actual counted number of visited object is as expected.

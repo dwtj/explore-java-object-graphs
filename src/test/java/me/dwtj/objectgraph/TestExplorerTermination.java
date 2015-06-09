@@ -3,6 +3,8 @@ package me.dwtj.objectgraph;
 import org.junit.Before;
 import org.junit.Test;
 
+import me.dwtj.objectgraph.util.List;
+
 /**
  * Tests the `Explorer` class (with a default `Visitor` and `Navigator`) to make sure that
  * exploration terminates when expected.
