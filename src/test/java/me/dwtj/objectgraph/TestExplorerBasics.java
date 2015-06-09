@@ -1,7 +1,5 @@
 package me.dwtj.objectgraph;
 
-import java.text.MessageFormat;
-
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
