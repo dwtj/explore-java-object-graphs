@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import me.dwtj.util.IdentitySet;
+import me.dwtj.objectgraph.util.IdentitySet;
 
 /**
  * Explores an object graph using a `Visitor` and a `Navigator`.

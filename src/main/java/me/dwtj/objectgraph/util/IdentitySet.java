@@ -1,4 +1,4 @@
-package me.dwtj.util;
+package me.dwtj.objectgraph.util;
 
 import java.util.Collection;
 import java.util.IdentityHashMap;
