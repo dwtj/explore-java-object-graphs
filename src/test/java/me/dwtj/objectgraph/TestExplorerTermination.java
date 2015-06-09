@@ -17,7 +17,8 @@ public class TestExplorerTermination
     Explorer default_explorer;
 
     @Before
-    public void setUp() {
+    public void setUp()
+    {
         default_explorer = new Explorer();
     }
 
@@ -63,6 +64,25 @@ public class TestExplorerTermination
         String str = "foo";
         default_explorer.explore(str);
         TestVisitCount.assertVisitCount(default_explorer, str, EXPECTED_COUNT);
+    }
+
+    @Test
+    public void stringArrayTest()
+    {
+        final int EXPECTED_COUNT = 4;
+        String[] str_arr = {"foo", "bar", "baz"};
+        default_explorer.explore(str_arr);
+        TestVisitCount.assertVisitCount(default_explorer, str_arr, EXPECTED_COUNT);
+    }
+
+    @Test
+    public void stringArrayArrayTest()
+    {
+        final int EXPECTED_COUNT = 9;
+        String[][] str_arr_arr = {{"a", "b", "c"},
+                                  {"d", "e", "f"}};
+        default_explorer.explore(str_arr_arr);
+        TestVisitCount.assertVisitCount(default_explorer, str_arr_arr, EXPECTED_COUNT);
     }
 
     /**

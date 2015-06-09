@@ -81,26 +81,54 @@ public class Explorer
 
     /**
      * Greedily navigates an `Explorer` towards as many objects as possible (with a few exceptions).
-     * It generally navigates towards all reference fields of a given object, even its private ones.
+     * It generally navigates towards all references held by a given object, even if those
+     * references are held in private fields.
+     *
      * Examples of fields towards which this class does not navigate:
      *
      *  - Fields with primitive types.
      *  - Fields containing `null` values.
      *  - Fields of `String` objects.
      *  - Fields of a primitive-boxing class (e.g. `Integer`).
+     * 
+     * Arrays are treated as a special case. If a given `Object` is an array of reference types,
+     * then this will navigate towards every non-`null` element in the array. If it is an array of
+     * primitives, then there will be no outgoing navigation.
      */
     public static class GreedyNavigator implements Navigator
     {
         public Iterable<Object> navigate(Object obj)
         {
-            /**
-             * Note that a child object is included in `rv` if and only if three conditions are met.
-             */
-            List<Object> rv = new ArrayList<Object>();
-
-            if (isNavigableObject(obj) == false) {
-                return rv;
+            if (isNavigableArray(obj))
+            {
+                return navigateArray((Object[]) obj);
             }
+            else if (isNavigableObject(obj))
+            {
+                return navigateObject(obj);
+            }
+            else
+            {
+                return new ArrayList<Object>(0);
+            }
+        }
+
+
+        private static Iterable<Object> navigateArray(Object[] arr)
+        {
+            List<Object> navigable = new ArrayList<Object>();
+            for (Object obj : arr) {
+                if (obj != null) {
+                    navigable.add(obj);
+                }
+            }
+            return navigable;
+        }
+
+
+        private static Iterable<Object> navigateObject(Object obj)
+        {
+            List<Object> navigable = new ArrayList<Object>();
 
             for (Field field : obj.getClass().getDeclaredFields())
             {
@@ -110,7 +138,7 @@ public class Explorer
                         field.setAccessible(true);
                         Object fieldValue = field.get(obj);
                         if (isNavigableFieldValue(fieldValue)) {
-                            rv.add(fieldValue);
+                            navigable.add(fieldValue);
                         }
                     }
                     catch (IllegalAccessException ex) {
@@ -123,18 +151,32 @@ public class Explorer
                     }
                 }
             }
-            return rv;
+
+            return navigable;
         }
 
+
         /**
-         * Returns true if navigation out from this object should be attempted.
+         * Returns true if `obj` is a non-array object from which outgoing navigation might be
+         * attempted.
          */
         protected static boolean isNavigableObject(Object obj)
         {
             return (obj == null
+                 || obj.getClass().isArray()
                  || obj instanceof String
                  || isBoxedPrimitiveInstance(obj)) ? false : true;
         }
+
+
+        /**
+         * Returns true if and only if this is an array of reference types.
+         */
+        protected static boolean isNavigableArray(Object obj)
+        {
+            return obj.getClass().isArray() && obj instanceof Object[];
+        }
+
 
         /**
          * Returns true if navigation to the object at the given field is expected to be navigable
@@ -145,6 +187,7 @@ public class Explorer
             return isPrimitiveField(f) ? false : true;
         }
 
+
         /**
          * Returns true if navigation towards this field should be attempted.
          */
@@ -152,6 +195,7 @@ public class Explorer
         {
             return (obj == null) ? false : true;
         }
+
 
         /**
          * Returns `true` if and only if the given `obj` is an instance of one of the primitive-
@@ -169,6 +213,7 @@ public class Explorer
                  || obj instanceof Long
                  || obj instanceof Short) ? true : false;
         }
+
 
         private static boolean isPrimitiveField(Field f)
         {
