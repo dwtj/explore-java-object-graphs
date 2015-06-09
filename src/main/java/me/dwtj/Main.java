@@ -1,5 +1,8 @@
 package me.dwtj;
 
+import me.dwtj.objectgraph.Explorer;
+import me.dwtj.util.Log;
+
 public class Main
 {
     public static final int RECURSION_DEPTH = 1000;
@@ -10,8 +13,10 @@ public class Main
 
         String[] xs_arr = {"foo", "bar", "baz"};
         List<String> xs_list = List.<String>cat(xs_arr);
-        System.out.println(">>>>>> xs_list: " + xs_list);
-        //Explorer explorer = new Explorer(new ObjectGraphLogger(), RECURSION_DEPTH);
-        //explorer.explore(xs_list);
+        Log.debug("xs_list: " + xs_list);
+
+        Explorer explorer = new Explorer();
+        explorer.explore(xs_list);
+        Log.debug("" + explorer.visited.size());
     }
 }
