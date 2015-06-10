@@ -2,6 +2,7 @@ package me.dwtj.objectgraph.util;
 
 public class Loop
 {
+    @SuppressWarnings("unused")
     private Loop ptr;
 
     public static Loop cons(int num_links)

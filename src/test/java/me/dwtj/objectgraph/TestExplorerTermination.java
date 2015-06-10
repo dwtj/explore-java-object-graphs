@@ -88,6 +88,7 @@ public class TestExplorerTermination
      * A class used in tests to make sure that the explorer does not attempt to navigate towards
      * primitive fields.
      */
+    @SuppressWarnings("unused")
     private static class PrimitiveHolder
     {
         short _short;
@@ -104,6 +105,7 @@ public class TestExplorerTermination
      * A class used in tests to make sure that the default Explorer does not attempt to navigate
      * beyond boxed primitives.
      */
+    @SuppressWarnings("unused")
     private static class BoxedPrimitiveHolder
     {
         Short _short = 42;
