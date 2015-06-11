@@ -1,9 +1,11 @@
 package me.dwtj.objectgraph;
 
 import java.lang.reflect.Field;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import me.dwtj.objectgraph.util.IdentitySet;
 
@@ -95,15 +97,44 @@ public class Explorer
      */
     public static class GreedyNavigator implements Navigator
     {
+        public static final Predicate<Object> DEFAULT_NAV_FROM = (obj -> !(obj instanceof String));
+        public static final Predicate<Class<?>> DEFAULT_NAV_TO = (clazz -> true);
+        
+        private final Predicate<Object> nav_from;
+        private final Predicate<Class<?>> nav_to;
+        
+
+        /**
+         * By default, this navigator will `nav_from` any object that isn't a `String`.
+         * By default, this navigator will `nav_to` is any type.
+         */
+        public GreedyNavigator()
+        {
+            nav_from = DEFAULT_NAV_FROM;
+            nav_to = DEFAULT_NAV_TO;
+        }
+        
+
+        /**
+         * @param nav_from Whether any navigation *from* a given object instance should be performed.
+         * @param nav_to   Whether any navigation *to* a given class type should be performed.
+         */
+        public GreedyNavigator(Predicate<Object> nav_from, Predicate<Class<?>> nav_to)
+        {
+            this.nav_from = nav_from;
+            this.nav_to = nav_to;
+        }
+        
+
         public Iterable<Object> navigate(Object obj)
         {
             if (isNavigableArray(obj))
             {
-                return navigateArray((Object[]) obj);
+                return navigateFromArray((Object[]) obj);
             }
             else if (isNavigableObject(obj))
             {
-                return navigateObject(obj);
+                return navigateFromObject(obj);
             }
             else
             {
@@ -112,19 +143,14 @@ public class Explorer
         }
 
 
-        private static Iterable<Object> navigateArray(Object[] arr)
+        private Iterable<Object> navigateFromArray(Object[] arr)
         {
-            List<Object> navigable = new ArrayList<Object>();
-            for (Object obj : arr) {
-                if (obj != null) {
-                    navigable.add(obj);
-                }
-            }
-            return navigable;
+            return Arrays.stream(arr).filter(obj -> isNavigableValue(obj))
+                                     .collect(Collectors.toList());
         }
 
 
-        private static Iterable<Object> navigateObject(Object obj)
+        private Iterable<Object> navigateFromObject(Object obj)
         {
             List<Object> navigable = new ArrayList<Object>();
 
@@ -135,7 +161,7 @@ public class Explorer
                     try {
                         field.setAccessible(true);
                         Object fieldValue = field.get(obj);
-                        if (isNavigableFieldValue(fieldValue)) {
+                        if (isNavigableValue(fieldValue)) {
                             navigable.add(fieldValue);
                         }
                     }
@@ -158,21 +184,25 @@ public class Explorer
          * Returns true if `obj` is a non-array object from which outgoing navigation might be
          * attempted.
          */
-        protected static boolean isNavigableObject(Object obj)
+        protected boolean isNavigableObject(Object obj)
         {
-            return (obj == null
-                 || obj.getClass().isArray()
-                 || obj instanceof String
-                 || isBoxedPrimitiveInstance(obj)) ? false : true;
+            return (obj != null
+                 && obj.getClass().isArray() == false
+                 && isBoxedPrimitiveInstance(obj) == false
+                 && nav_from.test(obj));
         }
 
 
         /**
-         * Returns true if and only if this is an array of reference types.
+         * Returns true if `obj` is an array of reference types for which `nav_to` is true.
          */
-        protected static boolean isNavigableArray(Object obj)
+        protected boolean isNavigableArray(Object obj)
         {
-            return obj.getClass().isArray() && obj instanceof Object[];
+            Class<?> clazz = obj.getClass();
+
+            return clazz.isArray()
+                && obj instanceof Object[]
+                && nav_to.test(clazz.getComponentType());
         }
 
 
@@ -180,16 +210,16 @@ public class Explorer
          * Returns true if navigation to the object at the given field is expected to be navigable
          * based on the field's type.
          */
-        protected static boolean isNavigableField(Field f)
+        protected boolean isNavigableField(Field f)
         {
-            return isPrimitiveField(f) ? false : true;
+            return isPrimitiveField(f) == false && nav_to.test(f.getType());
         }
 
 
         /**
-         * Returns true if navigation towards this field should be attempted.
+         * Returns true if navigation towards this value should be attempted.
          */
-        protected static boolean isNavigableFieldValue(Object obj)
+        protected boolean isNavigableValue(Object obj)
         {
             return (obj == null) ? false : true;
         }
