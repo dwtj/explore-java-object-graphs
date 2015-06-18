@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Greedily navigates an `Explorer` towards as many objects as possible (with a few exceptions).
@@ -82,7 +83,10 @@ public class GreedyNavigator implements Navigator
     {
         List<Object> navigable = new ArrayList<Object>();
 
-        for (Field field : obj.getClass().getFields())
+        List<Field> fields = Stream.concat(Arrays.stream(obj.getClass().getFields()),
+                                           Arrays.stream(obj.getClass().getDeclaredFields()))
+                                   .collect(Collectors.toList());
+        for (Field field : fields)
         {
             if (isNavigableField(field))
             {
