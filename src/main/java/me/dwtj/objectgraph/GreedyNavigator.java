@@ -82,7 +82,7 @@ public class GreedyNavigator implements Navigator
     {
         List<Object> navigable = new ArrayList<Object>();
 
-        for (Field field : obj.getClass().getDeclaredFields())
+        for (Field field : obj.getClass().getFields())
         {
             if (isNavigableField(field))
             {
@@ -163,7 +163,6 @@ public class GreedyNavigator implements Navigator
              || obj instanceof Byte
              || obj instanceof Character
              || obj instanceof Double
-             || obj instanceof Enum
              || obj instanceof Float
              || obj instanceof Integer
              || obj instanceof Long
